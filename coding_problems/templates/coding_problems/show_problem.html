@@ -1,16 +1,36 @@
-<form action="{% url 'submit_solution' problem.id %}" method="post">
-    {% csrf_token %}
-    <div>
-        <label for="language">Select Language:</label>
-        <select id="language" name="language" required>
-            <option value="python">Python</option>
-            <option value="cpp">C++</option>
-            <option value="java">Java</option>
-        </select>
-    </div>
-    <div>
-        <label for="code">Your Code:</label>
-        <textarea id="code" name="code" rows="10" required></textarea>
-    </div>
-    <button type="submit">Submit</button>
-</form>
+{% extends 'coding_problems/base.html' %}
+{% block title %}{{problem.name}}{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ problem.name }}</title>
+    <!-- Load CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/codemirror.min.css">
+    <!-- Load CodeMirror JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/codemirror.min.js"></script>
+    <!-- Load CodeMirror mode for your preferred language, e.g., Python -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/mode/python/python.min.js"></script>
+</head>
+<body>
+    <h1>{{ problem.name }}</h1>
+    <p>{{ problem.statement }}</p>
+    <form action="{% url 'submit_solution' problem.id %}" method="post">
+        {% csrf_token %}
+        <div id="editor"></div>
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Initialize CodeMirror -->
+    <script>
+        var editor = CodeMirror(document.getElementById("editor"), {
+            mode: "python",
+            lineNumbers: true
+        });
+    </script>
+</body>
+</html>
+{% endblock %}
